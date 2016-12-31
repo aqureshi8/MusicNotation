@@ -13,23 +13,199 @@
 		<script type="text/javascript">
 
 		var width = 700;
-		var height = 830;
+		var height = 840;
 		var xpadding = 50;
 		var ypadding = 50;
 
 		var dataName = "Observation";
 
+		var fishColors = ['navy', 'green', 'red', 'lightskyblue'];
+
+		var fish1 = 0;
+		var fish2 = 1;
+		var fish3 = 2;
+		var fish4 = 3;
+
 		var svg;
 		var plotData = [];
 		var lines;
+		var totdataCount;
 		var dataCount;
 		var minNum;
 		var maxNum;
 
+		function makeButtons() {
+			var buttonDiv = d3.select("body")
+								.append("div")
+								.attr("id", "buttons");
+				
+			buttonDiv.append("text")
+				.text("Fish 1");
+
+			buttonDiv.append("select")
+				.attr("id", "fish1")
+				.selectAll("option")
+				.data(fishColors)
+				.enter()
+				.append("option")
+				.attr("value", function(d) {
+					return d;
+				})
+				.text(function(d) {
+					return d;
+				});
+
+			document.getElementById('fish1').selectedIndex = fish1;
+
+			buttonDiv.append("text")
+				.text("Fish 2");
+
+			buttonDiv.append("select")
+				.attr("id", "fish2")
+				.selectAll("option")
+				.data(fishColors)
+				.enter()
+				.append("option")
+				.attr("value", function(d) {
+					return d;
+				})
+				.text(function(d) {
+					return d;
+				});
+
+			document.getElementById('fish2').selectedIndex = fish2;
+
+			buttonDiv.append("text")
+				.text("Fish 3");
+
+			buttonDiv.append("select")
+				.attr("id", "fish3")
+				.selectAll("option")
+				.data(fishColors)
+				.enter()
+				.append("option")
+				.attr("value", function(d) {
+					return d;
+				})
+				.text(function(d) {
+					return d;
+				});
+
+			document.getElementById('fish3').selectedIndex = fish3;
+
+			buttonDiv.append("text")
+				.text("Fish 4");
+
+			buttonDiv.append("select")
+				.attr("id", "fish4")
+				.selectAll("option")
+				.data(fishColors)
+				.enter()
+				.append("option")
+				.attr("value", function(d) {
+					return d;
+				})
+				.text(function(d) {
+					return d;
+				});
+
+			document.getElementById('fish4').selectedIndex = fish4;
+
+		}
+
+		function makeListeners() {
+			$('#fish1').on("change", function() {
+				var placeholder = fish1;
+				if(this.selectedIndex == document.getElementById('fish2').selectedIndex) {
+					fish1 = fish2;
+					fish2 = placeholder;
+					document.getElementById('fish2').selectedIndex = placeholder;
+				}
+				else if(this.selectedIndex == document.getElementById('fish3').selectedIndex) {
+					fish1 = fish3;
+					fish3 = placeholder;
+					document.getElementById('fish3').selectedIndex = placeholder;
+
+				}
+				else if(this.selectedIndex == document.getElementById('fish4').selectedIndex) {
+					fish1 = fish4;
+					fish4 = placeholder;
+					document.getElementById('fish4').selectedIndex = placeholder;
+				}
+
+				d3.selectAll('svg').remove();
+				makeMusic();
+			});
+
+			$('#fish2').on("change", function() {
+				var placeholder = fish2;
+				if(this.selectedIndex == document.getElementById('fish1').selectedIndex) {
+					fish2 = fish1;
+					fish1 = placeholder;
+					document.getElementById('fish1').selectedIndex = placeholder;
+				}
+				else if(this.selectedIndex == document.getElementById('fish3').selectedIndex) {
+					fish2 = fish3;
+					fish3 = placeholder;
+					document.getElementById('fish3').selectedIndex = placeholder;
+				}
+				else if(this.selectedIndex == document.getElementById('fish4').selectedIndex) {
+					fish2 = fish4;
+					fish4 = placeholder;
+					document.getElementById('fish4').selectedIndex = placeholder;
+				}
+				d3.selectAll('svg').remove();
+				makeMusic();
+			});
+
+			$('#fish3').on("change", function() {
+				var placeholder = fish3;
+				if(this.selectedIndex == document.getElementById('fish2').selectedIndex) {
+					fish3 = fish2;
+					fish2 = placeholder;
+					document.getElementById('fish2').selectedIndex = placeholder;
+				}
+				else if(this.selectedIndex == document.getElementById('fish1').selectedIndex) {
+					fish3 = fish1;
+					fish1 = placeholder;
+					document.getElementById('fish1').selectedIndex = placeholder;
+				}
+				else if(this.selectedIndex == document.getElementById('fish4').selectedIndex) {
+					fish3 = fish4;
+					fish4 = placeholder;
+					document.getElementById('fish4').selectedIndex = placeholder;
+				}
+				d3.selectAll('svg').remove();
+				makeMusic();
+			});
+
+			$('#fish4').on("change", function() {
+				var placeholder = fish4;
+				if(this.selectedIndex == document.getElementById('fish2').selectedIndex) {
+					fish4 = fish2;
+					fish2 = placeholder;
+					document.getElementById('fish2').selectedIndex = placeholder;
+				}
+				else if(this.selectedIndex == document.getElementById('fish3').selectedIndex) {
+					fish4 = fish3;
+					fish3 = placeholder;
+					document.getElementById('fish3').selectedIndex = placeholder;
+				}
+				else if(this.selectedIndex == document.getElementById('fish1').selectedIndex) {
+					fish4 = fish1;
+					fish1 = placeholder;
+					document.getElementById('fish1').selectedIndex = placeholder;
+				}
+				d3.selectAll('svg').remove();
+				makeMusic();
+			});
+		}
+
+		function makeMusic() {
 			d3.csv("Group 1, Day 1.csv", function(data) {
 
 				//console.log(data);
-				dataCount = data.length;
+				totdataCount = data.length;
 
 				plotData = data.map(function(d) {
 					return d["Observation"];
@@ -52,7 +228,7 @@
 							return startingPoint + 10;
 						})
 						.attr("stroke-width", 1)
-						.attr("stroke", "blue");
+						.attr("stroke", "navy");
 
 					svg.append("line")
 						.attr("x1", function(d, i) {
@@ -68,7 +244,7 @@
 							return startingPoint + 5*10 + 10;
 						})
 						.attr("stroke-width", 1)
-						.attr("stroke", "goldenrod");
+						.attr("stroke", "green");
 
 					svg.append("line")
 						.attr("x1", function(d, i) {
@@ -100,7 +276,7 @@
 							return startingPoint + 10*15 + 10;
 						})
 						.attr("stroke-width", 1)
-						.attr("stroke", "green");
+						.attr("stroke", "lightskyblue");
 				}
 
 				function draw(minArrowNum, maxArrowNum) {
@@ -113,11 +289,24 @@
 					lines.append("line")
 							.attr("y1", function(d,i) {
 								if(i >= minArrowNum && i < maxArrowNum) {
-									if((parseInt(d.charAt(0)) - 1) == 0) {
+									var place = parseInt(d.charAt(0));
+									if(place == 1) {
+										place = fish1;
+									}
+									else if(place == 2) {
+										place = fish2;
+									}
+									else if(place == 3) {
+										place = fish3;
+									}
+									else if(place = 4) {
+										place = fish4;
+									}
+									if(place == 0) {
 										return (parseInt((i%264)/66) * 220) + 10;
 									}
 									else {
-										return (parseInt((i%264)/66) * 220) + 10 * 5 * (parseInt(d.charAt(0)) - 1) + 10;
+										return (parseInt((i%264)/66) * 220) + 10 * 5 * place + 10;
 									}
 								}
 								else {
@@ -145,11 +334,24 @@
 							})
 							.attr("y2", function(d,i) {
 								if(i >= minArrowNum && i < maxArrowNum) {
-									if((parseInt(d.slice(-1)) - 1) == 0) {
+									var place = parseInt(d.slice(-1));
+									if(place == 1) {
+										place = fish1;
+									}
+									else if(place == 2) {
+										place = fish2;
+									}
+									else if(place == 3) {
+										place = fish3;
+									}
+									else if(place = 4) {
+										place = fish4;
+									}
+									if(place == 0) {
 										return (parseInt((i%264)/66) * 220) + 10;
 									}
 									else {
-										return (parseInt((i%264)/66) * 220) + 10 * 5 * (parseInt(d.slice(-1)) - 1) + 10;
+										return (parseInt((i%264)/66) * 220) + 10 * 5 * place + 10;
 									}
 								}
 								else {
@@ -158,31 +360,73 @@
 							})
 							.attr("stroke-width", 1)
 							.attr("stroke", function(d,i) {
-								if(parseInt(d.charAt(0)) == 1) {
-									return "blue";
+								var place = parseInt(d.charAt(0));
+								if(place == 1) {
+									place = fish1;
 								}
-								else if(parseInt(d.charAt(0)) == 2) {
-									return "goldenrod";
+								else if(place == 2) {
+									place = fish2;
 								}
-								else if(parseInt(d.charAt(0)) == 3) {
+								else if(place == 3) {
+									place = fish3;
+								}
+								else if(place = 4) {
+									place = fish4;
+								}
+								if(place == 0) {
+									return "navy";
+								}
+								else if(place == 1) {
+									return "green";
+								}
+								else if(place == 2) {
 									return "red";
 								}
-								else if(parseInt(d.charAt(0)) == 4) {
-									return "green";
+								else if(place == 3) {
+									return "lightskyblue";
 								}
 							});
 
 					lines.append('path')
     		  			.attr('d', function(d,i) { 
     		  				if(i >= minArrowNum && i < maxArrowNum) {
+    		  					var place1 = parseInt(d.charAt(0));
+								if(place1 == 1) {
+									place1 = fish1;
+								}
+								else if(place1 == 2) {
+									place1 = fish2;
+								}
+								else if(place1 == 3) {
+									place1 = fish3;
+								}
+								else if(place1 == 4) {
+									place1 = fish4;
+								}
+								else {
+									return null;
+								}
+								var place2 = parseInt(d.slice(-1));
+								if(place2 == 1) {
+									place2 = fish1;
+								}
+								else if(place2 == 2) {
+									place2 = fish2;
+								}
+								else if(place2 == 3) {
+									place2 = fish3;
+								}
+								else if(place2 == 4) {
+									place2 = fish4;
+								}
 	        					var x = 10*((i%264)%66) + 25;
-    	    					if((parseInt(d.slice(-1)) - 1) == 0) {
+    	    					if(place2 == 0) {
 										var y = (parseInt((i%264)/66) * 220) + 10;
 									}
 									else {
-										var y = (parseInt((i%264)/66) * 220) + 10 * 5 * (parseInt(d.slice(-1)) - 1) + 10;
+										var y = (parseInt((i%264)/66) * 220) + 10 * 5 * place2 + 10;
 									};
-								if(parseInt(d.charAt(0)) > parseInt(d.slice(-1))) {
+								if(place1 > place2) {
 									return 'M ' + x +' '+ y + ' l 5 5 l -10 0 z';
 								}
         						else {
@@ -194,25 +438,68 @@
         					}
       					})
 		      			.attr("fill", function(d,i) {
-								if(parseInt(d.charAt(0)) == 1) {
-									return "blue";
+		      				var place = parseInt(d.charAt(0));
+							if(place == 1) {
+								place = fish1;
+							}
+							else if(place == 2) {
+								place = fish2;
+							}
+							else if(place == 3) {
+								place = fish3;
+							}
+							else if(place = 4) {
+								place = fish4;
+							}
+							if(place == 0) {
+								return "navy";
+							}
+							else if(place == 1) {
+								return "green";
+							}
+							else if(place == 2) {
+								return "red";
+							}
+							else if(place == 3) {
+								return "lightskyblue";
+							}
+						});
+
+		      			lines.append('text')
+		      				 .text(function(d, i) {
+		      				 	if(i >= minArrowNum && i < maxArrowNum) {
+		      				 		dataCount++;
+		      				 		if(dataCount % 10 == 0) {
+		      				 			return dataCount;
+		      				 		}
+		      				 		else {
+		      				 			return "";
+		      				 		}
+		      				 	}
+		      				 	else {
+		      				 		return "";
+		      				 	}
+		      				 })
+		      				 .attr("x", function(d,i) {
+		      				 	if(i >= minArrowNum && i < maxArrowNum) {
+									return 10*((i%264)%66) + 20;
 								}
-								else if(parseInt(d.charAt(0)) == 2) {
-									return "goldenrod";
+								else {
+									return 0;
 								}
-								else if(parseInt(d.charAt(0)) == 3) {
-									return "red";
-								}
-								else if(parseInt(d.charAt(0)) == 4) {
-									return "green";
-								}
-							});
+		      				 })
+		      				 .attr("y", function(d,i) {
+		      				 	if(i >= minArrowNum && i < maxArrowNum) {
+		      				 		return (parseInt((i%264)/66) * 220) + 175;
+		      				 	}
+		      				 });
 				}
 
 				minNum = 0;
 				maxNum = 0;
+				dataCount = 0;
 
-				for(i=0; maxNum < dataCount; i++) {
+				for(i=0; maxNum < totdataCount; i++) {
 					svg = d3.select("body")
 							.append("svg")
 							.attr("width", function() {
@@ -226,6 +513,11 @@
 					draw(minNum,maxNum);
 				}
 			});
+		}
+
+		makeButtons();
+		makeListeners();
+		makeMusic();
 
 		</script>
 	</body>
